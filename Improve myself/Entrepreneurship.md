@@ -47,4 +47,6 @@ money->working captital management->
 
 **IPO**
 
+#### IP protection
 
+how to protect software? is a copy right. with some abundant function
