@@ -26,6 +26,7 @@ sell oil, licensing? need to consider resources you have
 
 as for sell oil, consider mass plant or retail (local) plant (for the recycling process, think about laundry for clean plastic)
 
-#### idea->theory->experiment->application->product design->prototype->market soundning->small scale production->approval->marketing->modify->medium scale prodution->industrail scale production(raw materials supply->industrail process)->volume distribution->after-scales service->money->working captital management
+#### idea
+->theory->experiment->application->product design->prototype->market soundning->small scale production->approval->marketing->modify->medium scale prodution->industrail scale production(raw materials supply->industrail process)->volume distribution->after-scales service->money->working captital management->IPO
 
 
