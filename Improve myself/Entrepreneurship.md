@@ -4,7 +4,7 @@ a solution that is enough to fit your customers' target (maybe only a 60% produc
 
 AI + **your own idea**
 
-grab resource, and know how to use resource effeciently.
+#### grab resource, and know how to use resource effeciently.
 
 think 3 questions when venue?
 
@@ -20,11 +20,12 @@ is feasible? is innovative & disruptive? any change in **infrastructure**? come 
 
 when come up idea, think about a space out idea (maybe unrealistic), pull it down.
 
-case study: plastic to oil
+#### case study: plastic to oil
 
 sell oil, licensing? need to consider resources you have
 
 as for sell oil, consider mass plant or retail (local) plant (for the recycling process, think about laundry for clean plastic)
 
+#### idea->theory->experiment->application->product design->prototype->market soundning->small scale production->approval->marketing->modify->medium scale prodution->industrail scale production(raw materials supply->industrail process)->volume distribution->after-scales service->money->working captital management
 
 
