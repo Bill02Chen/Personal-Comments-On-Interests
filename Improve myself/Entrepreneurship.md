@@ -49,4 +49,9 @@ money->working captital management->
 
 #### IP protection
 
+patent
+
+patant can be fake
+
 how to protect software? is a copy right. with some abundant function
+
