@@ -143,7 +143,8 @@ Finishing: STOP immediately, don’t drag on, don’t elaborate, let the audienc
 - Extension of presentation
 - Develop a question list, link one question to another 
 - <u>They want to draw conclusion to 1. Project profitable? 2. Are you honest? I don’t know the answer, show honesty.</u>
-Passion
+
+Passion matters.
 
 **Interview: sell yourself; think about 3 sales points of yourselves; you can tell a story**
 
@@ -154,58 +155,73 @@ Passion
 	IPO timing
 - Executive summary
 - Contents
+
 **Style & tones**
 - Objective information the company
 - Insider information our company
 - Avoid over claims such as monopolize, increase ten folds (useless with out high base compare money)
 - 3rd party information to support 
-- Highlight questions and doubts - try to provide answers 
+- Highlight questions and doubts - try to provide answers
+  
 **Business model**
 - Based on proven success models. Best: a continuation of an existing situation. Worst: needs to change existing habits. If the case, states why and how to change!
 - Utilize all your resources 
-- Highlight the strengths of management 
+- Highlight the strengths of management
+  
 **Board of directors**
+
 **Management team**
 - Business is zoom out to a bigger and bigger area (scientist zoom in a small point)
 - My perfect team: a crazy guy (a visioner/dreamer), a maker/inventor who can fulfill the dream, a super salesman
+  
 **market & growth points**
 - Growth rate assumptions
 - Market share assumptions
 - How to achieve rate, share
 - Competitors, competition approach: price vs technology, price vs quality, refer to cases in other countries
+  
 **Customers**
 - How to make your product known to them
 - how to sell your products 
 - How to serve them (after sale)
+  
 **Technology edges**
 - Global Technology development trend
 - Relationship Inventor and the company
 - Patent
 - Space Out idea
 - Business model execution
+  
 **Achievements & milestones**
 - Very important
 - Confirm the business model
 - confirm the ability of the management
 - Mentioned in point form
 - Short and easy to read
+  
 **3 major turning points**
 - First money of revenue
 - first money of profit
 - first money of positive cashflow
+  
 **Use of proceeds**
+
 **Investment terms**
 
 Use investment proposal to contact potential investors, talk to them and ask for their ideas, and combine it with your business plan.
 
 ### New product launch & pharmaceutical
 Find unique product—Market readiness
-Life-cycle management BCG model
+
+Life-cycle management: BCG model
+
 PESTEL analysis
+
 How to build a competitive for new product launch
 - [ ] Expand market
 - [ ] Expand market segmentation 
 - [ ] Shape the market and build the awareness (case: advertisement肥胖要找医生、林嘉欣）
 - [ ] Brand buiding
 - [ ] Patient centric strategy
+
 How to manage team: 7-s model 
