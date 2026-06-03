@@ -73,11 +73,11 @@ Passion & excitement
 3. Not as a consultant
 
 **Rule of communication**:
-Right channel in right frequency
--Interest, needs, values, priorities, concerns
-Whatever you present, show To the audience 是没有参考的
-**Only The audience must receive your message**, the communication is Q.E.D
-Investor has the final interpretation 
+- Right channel in right frequency
+- Interest, needs, values, priorities, concerns
+- Whatever you present, show To the audience 是没有参考的
+- **Only The audience must receive your message**, the communication is Q.E.D
+- Investor has the final interpretation 
 
 ## ATTENTION SEEKING
 Best part in beginning and end
@@ -97,9 +97,9 @@ What to do in regain attention?
 3. Less words more pictures
 
 Structure - 3parts
-Start simple ice breaking (warm up audiences by your products) and your key selling points
-Middle wake-up calls
-Ending wrap up with the key selling points
+1. Start simple ice breaking (warm up audiences by your products) and your key selling points
+2. Middle wake-up calls
+3. Ending wrap up with the key selling points
 
 1. Decide up to 3 most important messages
 2. Convert the important messages to different themes
@@ -124,65 +124,75 @@ In the Interview tell a story
     1. humorous tales: easily be accepted bur less memorable; 
     2. bible and religious stories: easily be recognized, beware of the religious of audiences; 
     3. recent events: can be painful and terrify one like earthquake, still fresh in listeners’ memories
-Preparation: 1. Visualize it by reading several times 2. Check the colors, pictures, feelings you want to create 3. Try a few times, change your wording, tones, facial expressions when necessary 4. Live with it and make it a truth
+
+Preparation:
+1. Visualize it by reading several times
+2. Check the colors, pictures, feelings you want to create
+3. Try a few times, change your wording, tones, facial expressions when necessary
+4. Live with it and make it a truth
+
 Engagement of the audience 
-Techniques: 1. Be sincere 2. always useful to start with a physical object 3. Pay attention to your gestures, facial expressions, stimulate listeners senses.
+Techniques: 
+1. Be sincere
+2. always useful to start with a physical object
+3. Pay attention to your gestures, facial expressions, stimulate listeners senses.
+
 Finishing: STOP immediately, don’t drag on, don’t elaborate, let the audiences taste and think themselves
 
 **QA**
-Extension of presentation
-Develop a question list, link one question to another 
-They want to draw conclusion to 1. Project profitable? 2. Are you honest? I don’t know the answer, show honesty.
+- Extension of presentation
+- Develop a question list, link one question to another 
+- <u>They want to draw conclusion to 1. Project profitable? 2. Are you honest? I don’t know the answer, show honesty.</u>
 Passion
 
 **Interview: sell yourself; think about 3 sales points of yourselves; you can tell a story**
 
 # INVESTMENT PROPOSAL
-Introduction letter containing
+- Introduction letter containing
 	What is the project
 	Main selling point 
 	IPO timing
-Executive summary
-Contents
+- Executive summary
+- Contents
 **Style & tones**
-Objective information the company
-Insider information our company
-Avoid over claims such as monopolize, increase ten folds (useless with out high base compare money)
-3rd party information to support 
-Highlight questions and doubts - try to provide answers 
+- Objective information the company
+- Insider information our company
+- Avoid over claims such as monopolize, increase ten folds (useless with out high base compare money)
+- 3rd party information to support 
+- Highlight questions and doubts - try to provide answers 
 **Business model**
-Based on proven success models. Best: a continuation of an existing situation. Worst: needs to change existing habits. If the case, states why and how to change!
-Utilize all your resources 
-Highlight the strengths of management 
+- Based on proven success models. Best: a continuation of an existing situation. Worst: needs to change existing habits. If the case, states why and how to change!
+- Utilize all your resources 
+- Highlight the strengths of management 
 **Board of directors**
 **Management team**
-Business is zoom out to a bigger and bigger area (scientist zoom in a small point)
-My perfect team: a crazy guy (a visioner/dreamer), a maker/inventor who can fulfill the dream, a super salesman
+- Business is zoom out to a bigger and bigger area (scientist zoom in a small point)
+- My perfect team: a crazy guy (a visioner/dreamer), a maker/inventor who can fulfill the dream, a super salesman
 **market & growth points**
-Growth rate assumptions
-Market share assumptions
-How to achieve rate, share
-Competitors, competition approach: price vs technology, price vs quality, refer to cases in other countries
+- Growth rate assumptions
+- Market share assumptions
+- How to achieve rate, share
+- Competitors, competition approach: price vs technology, price vs quality, refer to cases in other countries
 **Customers**
-How to make your product known to them
-how to sell your products 
-How to serve them (after sale)
+- How to make your product known to them
+- how to sell your products 
+- How to serve them (after sale)
 **Technology edges**
-Global Technology development trend
-Relationship Inventor and the company
-Patent
-Space Out idea
-Business model execution
+- Global Technology development trend
+- Relationship Inventor and the company
+- Patent
+- Space Out idea
+- Business model execution
 **Achievements & milestones**
-Very important
-Confirm the business model
-confirm the ability of the management
-Mentioned in point form
-Short and easy to read
+- Very important
+- Confirm the business model
+- confirm the ability of the management
+- Mentioned in point form
+- Short and easy to read
 **3 major turning points**
-First money of revenue
-first money of profit
-first money of positive cashflow
+- First money of revenue
+- first money of profit
+- first money of positive cashflow
 **Use of proceeds**
 **Investment terms**
 
