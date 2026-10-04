@@ -8,4 +8,10 @@ Look in Environment Reminders folder
 
 Look in Game Operations folder
 
-## 3. 
+## 3. Improve myself 自我提升
+
+Look in Improve myself folder
+
+## 4. Interview preparation 面试准备
+
+Look in Interview folder
