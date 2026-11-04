@@ -1,5 +1,7 @@
 # Some comments on different things
 
+*厚积薄发*
+
 ## 1. Environment install reminder 安装环境
 
 Look in Environment Reminders folder
