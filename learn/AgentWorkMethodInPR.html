@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B 站视频总结：一个月发 2000 个 PR 的 Agent 工作法</title>
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --ink-soft: #44445c;
+    --accent: #2563eb;
+    --accent-soft: #eff4ff;
+    --warn: #b45309;
+    --warn-bg: #fff7ed;
+    --line: #e2e4ef;
+    --bg: #fafbfe;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+    line-height: 1.75;
+    font-size: 16px;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 48px 28px 80px; }
+  header.hero {
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 24px;
+    margin-bottom: 32px;
+  }
+  .tag {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: #fff;
+    background: var(--accent);
+    border-radius: 4px;
+    padding: 2px 10px;
+    margin-bottom: 14px;
+  }
+  h1 { font-size: 26px; line-height: 1.4; margin: 0 0 12px; }
+  .meta { color: var(--ink-soft); font-size: 14px; }
+  .meta span { margin-right: 18px; }
+  h2 {
+    font-size: 20px;
+    margin: 44px 0 14px;
+    padding-left: 12px;
+    border-left: 4px solid var(--accent);
+  }
+  h3 { font-size: 17px; margin: 28px 0 10px; color: var(--ink); }
+  p { margin: 12px 0; }
+  ul, ol { padding-left: 24px; margin: 10px 0; }
+  li { margin: 6px 0; }
+  .lead {
+    background: var(--accent-soft);
+    border-radius: 10px;
+    padding: 20px 24px;
+    font-size: 16.5px;
+  }
+  .lead strong { color: var(--accent); }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 16px 0;
+    font-size: 14.5px;
+    background: #fff;
+  }
+  th, td {
+    border: 1px solid var(--line);
+    padding: 9px 12px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th { background: #f0f2fa; font-weight: 600; }
+  tr:nth-child(even) td { background: #fcfcff; }
+  .note {
+    background: var(--warn-bg);
+    border-left: 4px solid var(--warn);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    font-size: 14.5px;
+    color: #5b4a32;
+    margin: 18px 0;
+  }
+  .basis { color: var(--ink-soft); font-size: 14px; }
+  code, .code {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 13.5px;
+    background: #eef0f7;
+    border-radius: 4px;
+    padding: 1px 6px;
+  }
+  pre {
+    background: #14142b;
+    color: #e6e6f5;
+    border-radius: 8px;
+    padding: 16px 20px;
+    overflow-x: auto;
+    font-size: 13.5px;
+    line-height: 1.6;
+  }
+  pre code { background: none; padding: 0; color: inherit; }
+  footer {
+    margin-top: 56px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    color: var(--ink-soft);
+    font-size: 13.5px;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .srclist li { font-size: 14px; margin: 8px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <span class="tag">视频总结</span>
+  <h1>React 核心成员分享：在 SpaceXAI 一个月发 2000 个 PR 的 Agent 工作法</h1>
+  <div class="meta">
+    <span>来源：bilibili.com · BV1WKaV6bEBB</span>
+    <span>UP 主：ChHsich</span>
+    <span>发布：2026-09-28</span>
+    <span>时长：38 分钟 × 2 P（P1 中英字幕 / P2 中配中字）</span>
+  </div>
+</header>
+
+<h2>结论</h2>
+<p class="lead">这场演讲的核心论点：<strong>提高 agent 产出的关键不是让 AI 写更多代码，而是收紧代码库环境，让 agent 默认做对。</strong>演讲者 Lauren Tan（@poteto，React 核心成员，现于 SpaceXAI 做 Grok Bot，此前在 Cursor 负责 agent 窗口性能）用"一个月向生产环境发布 2,000–2,500 个 PR"的结果论证这套方法。</p>
+
+<h2>1. 代码库是 agent 最好的记忆：禁止注释的来龙去脉</h2>
+<p>起点是 Grok Bot 早期的真实状况：8 个"上帝文件"，每个超过 10,000 行。每个任务单独看 agent 都能完成，但目录结构、依赖关系、进程边界、状态管理随时间全部缠在一起。人能改，但越来越难信任系统。</p>
+<p>她观察到的机制：agent 发现代码里有一处 workaround（临时规避方案），会把这处 workaround 当范本照抄。一个 workaround 短则几天扩散全库，之后就成了所有 agent 事实上的工作模式。注释本意是给人解释，实际成了低质量代码的传播渠道。因此 Dune 框架直接禁止代码注释。</p>
+<p>替代注释的是结构性表达：每个功能的状态、组件、逻辑共置在同一目录；Electron 主进程与渲染进程的边界由 CI 依赖图检查机械强制，跨层、跨进程 import 直接构建失败。她概括设计原则只有一句："agent 喜欢走捷径，所以让最短路径就是正确路径。"</p>
+<p><strong>关键区分：规范是软约束，架构是硬边界。</strong>"UI 层禁止直接 import 数据库模块"写进文档，agent 可能读到也可能没读到；写成 <code>no-restricted-imports</code> lint 规则并在 CI 强制执行，违规路径物理不存在。前者是"请你不要"，后者是"你不能"。</p>
+
+<h2>2. 把"近道"设计成"正道"的具体做法</h2>
+<ul>
+  <li><strong>Feature 共置</strong>：一个功能的所有代码放同一目录，不分散到多处。</li>
+  <li><strong>进程边界</strong>：主进程与渲染进程清晰隔离，重任务不挤 UI 线程。</li>
+  <li><strong>依赖图 CI 检查</strong>：机械阻止跨层 import，不是写规范，是直接封掉。</li>
+  <li><strong>危险模式禁用</strong>：lint 把 agent 反复误用的模式（典型例子是滥用 <code>useEffect</code>）直接编译报错。</li>
+</ul>
+<p>效果：代码库锁到人写代码嫌烦，但 agent 默认走对路，非工程师（设计师、CEO）也能直接向生产环境发功能。代价是前置投入：约 600 个重构 PR。她自己的定位："600 多个重构 PR 才是真实的基础设施。那晚自动合并的 20 个 PR，只是输出。"</p>
+
+<h2>3. 五级去向：纠错顺序大多数人做反了</h2>
+<p>一个错误模式出现第二次时（出现一次是偶然，两次算一类），按以下顺序在最高有效层级修掉：</p>
+<ol>
+  <li><strong>架构</strong>：让错误状态在类型层面不可表示，或让违规写法编译失败。</li>
+  <li><strong>类型系统 → lint / CI</strong>：如果还能编译通过，加检查，且报错信息里直接写出正确写法。</li>
+  <li><strong>行为测试</strong>：重写或删除"所有函数都返回空也能通过"的测试。</li>
+  <li><strong>规则、bugbot、skill</strong>：适合需要判断力的场景。</li>
+  <li><strong>文档和人工风格指南</strong>：最后才用，因为对 agent 而言"不读文档不会失败"，没有强制力。</li>
+</ol>
+<p>多数团队的条件反射是往 AGENTS.md 里加一句话（第 5 级），这套顺序把它放在最底层。每条新检查必须用一个真实发生过的过去错误来验证有效性，不接受凭空的规则。</p>
+
+<h2>4. 验证 skill：六个固定部分</h2>
+<p>验证（verification）的定义不是跑测试、不是 build 通过，而是：驱动真实应用、执行真实流程、检查真实产物、给出可视证据。不同类型变更对应不同证据：</p>
+<table>
+  <tr><th>变更类型</th><th>验证方式</th><th>证据形式</th></tr>
+  <tr><td>CLI 变更</td><td>跑真实命令</td><td>命令输出 vs 预期输出</td></tr>
+  <tr><td>UI 变更</td><td>在运行的应用里走一遍流程</td><td>截图 / 录屏</td></tr>
+  <tr><td>解析器 / 迁移</td><td>重放已保存的输入</td><td>前后输出 diff</td></tr>
+  <tr><td>性能变更</td><td>前后各跑一次 profile</td><td>性能数据对比</td></tr>
+</table>
+<p>pstack 的 <code>/create-verification-skill</code> 命令让 agent 先"面试"代码库（识别用户触达点、启动方式、可驱动接口，如浏览器 CDP、PTY、HTTP），然后生成项目级 skill，固定六节：</p>
+<ol>
+  <li><strong>Launch</strong>：启动命令 + 如何判断应用已就绪。</li>
+  <li><strong>Doctor</strong>：一条只读检查，判断这个实例值不值得驱动。</li>
+  <li><strong>Drive</strong>：本仓库真实的操作路径，禁止占位符。</li>
+  <li><strong>Evidence</strong>：捕获什么、存到哪里；证据必须来自真实用户路径。</li>
+  <li><strong>Cleanup</strong>：只清理自己启动的东西，永不删除证据。</li>
+  <li><strong>Helpers</strong>：自带脚本必须可执行，并写明调用方式。</li>
+</ol>
+<p>文档里一句值得记住的话：<em>"一个从未被执行过的生成 skill 是草稿，不是交付物。"</em></p>
+<p>配套产物是 <strong>Feature Map</strong>：按功能目录索引整个应用（如 <code>features/auth/login.md</code>），每个功能文件固定写 Launch / Drive / Evidence / Cleanup 四节。这解决 agent"不认识整个应用"的问题。</p>
+<p>一个重要的工程决策：把每个任务中机械的部分下沉为 skill 自带的 CLI（本质是 Playwright 和 Chrome DevTools Protocol 的封装），判断的部分留给 agent。在此之前，每个 agent 各自搭一次性测试脚本，质量参差且用完即弃；CLI 让所有 agent 调同一个东西。</p>
+<p>成本警示：Feature Map 会随代码演进腐化，需要持续维护（pstack 有 <code>/maintain-verification-skill</code> 做审计）。她建议把它当关键基础设施，值得设 oncall 轮值。</p>
+<p>起源故事：2026 年 4 月初她在 Cursor 修 agent 窗口卡顿，人肉读 flame graph 和 heap snapshot 再转述给 agent，她自称"agent 和 Chrome DevTools 之间的肉代理"。她写的第一个 skill 就是验证 skill。agent 能自己看到改动结果后，闭环形成，她才退得出来。</p>
+
+<h2>5. 信任阶梯的具体形态</h2>
+<p>放权的前提逐级累加：</p>
+<ol>
+  <li><strong>第 1 级（今天就能做）</strong>：机械约束（lint、CI、目录结构）、原子 PR 规范（每个 PR 只做一件事，可独立验证、可独立回滚）、indirect prompt。</li>
+  <li><strong>第 2 级（1–3 个月）</strong>：建立 Feature Map、验证 skill 上线、低风险任务开始过夜运行。</li>
+  <li><strong>第 3 级（持续）</strong>：验证技能和原则库持续维护、架构决策仍由人把关。</li>
+</ol>
+<p>配合信任放权的两个 prompt 层技巧：</p>
+<ul>
+  <li><strong>Indirect prompt</strong>：不直接下指令，先让 agent 读相关材料并用自己的话复述问题，复述有偏差就在写代码前纠正。把理解验证前置到成本最低的环节。</li>
+  <li><strong>给意图不给步骤</strong>："告诉它你想要什么，以及你怎么知道它完成了。"列出步骤会让 agent 只做被列出的部分。</li>
+</ul>
+
+<h2>6. 夜间自动合并：角色拆分和五道门槛</h2>
+<p>"AI 自查自并"是误传。autopilot-full 剧本的角色拆分：</p>
+<ul>
+  <li>每个 PR 有一个 owner agent，负责从构建到合并的全过程。</li>
+  <li><strong>owner 对自己工作的判断不计数。</strong>合并许可来自一个 root agent，它汇总独立验证者的结论。</li>
+  <li>操作者点名保留的事项仍归人，任何 agent 不得合并。</li>
+</ul>
+<p>合并必须同时满足的条件：</p>
+<table>
+  <tr><th>门槛</th><th>要求</th></tr>
+  <tr><td>谁合并</td><td>一个 PR 一个 owner agent；人点名保留的项除外</td></tr>
+  <tr><td>何时验证</td><td>在 owner 声明"代码就绪"的那个 head SHA 上验证；此后每次改变补丁的 push 都要重新验证</td></tr>
+  <tr><td>验证者做什么</td><td>并行独立通道：重跑门禁、在真实界面上证明行为、带着对 PR 描述的不信任审计 diff</td></tr>
+  <tr><td>合并条件</td><td>结论针对的正是被合并的那个补丁；CI 在 rebase 到主干后的最新 head 上通过</td></tr>
+  <tr><td>审计与停止</td><td>root agent 每小时审计每个 owner；操作者下达的停止指令以"零写入"形式到达所有 owner</td></tr>
+</table>
+<p>过夜任务交给 agent 的"合约"有四部分：目标、完成条件、权限、逃生舱。示例：</p>
+<pre><code>/poteto-mode im going to bed. migrate every caller to the new parser
+in a fresh worktree off &lt;base&gt;.
+done means zero old callers, all parser fixtures pass, old api deleted.
+keep a decision log. don't ask me before committing.
+/loop until done. if you're truly stuck after a few hours, stop and write up why.</code></pre>
+<p>警告很直接：<strong>"工作 4 小时"不是合法的完成条件</strong>——你给 agent 的是一段时间，不是一个可验证的状态，早上得到的是 4 小时的动作，不是一个结果。</p>
+<p>成本：完整 autopilot"相当耗 token"，验证者可从 10 个减到 1 个。第三方对比测试：同一项目不用 pstack 约 30 分钟完成，用 pstack 约 1 小时，但后者在合并前抓住了 3 处 agent 虚构的声明。代价是否划算取决于这些错误进入生产后的修复成本。</p>
+<p>边界：她自己明确两点——这套做法她花了几个月才建成，装个插件到不了她的水平；对不可回滚的系统（数据丢失、医疗、金融场景）她没有答案，pstack 原则只对不可逆动作保留人工确认。</p>
+<p>新手路线：先用 autopilot-stack（同样的 owner 循环但 nothing 自动合并，早上人逐个落地），连续几周早上审计无可回滚项后，再升到 autopilot-full。</p>
+
+<h2>7. 园丁角色：职责清单与运作实例</h2>
+<p>园丁（gardening）的定义：维护 agent 工作环境的工作，包括重构、删除 agent 会照抄的反模式。三原则的操作化：</p>
+<ol>
+  <li><strong>删技术债</strong>：不是一次性大扫除，而是持续重构。2,462 个 PR 中大部分是这类维护工作，不是新功能。</li>
+  <li><strong>守住一条铺装路</strong>：只保留每种任务的一条支持路径，删掉旧路径，让抄旧路物理不可能。</li>
+  <li><strong>写 lint 规则止血</strong>：每发现一类 agent 重复犯的错误，就问一次"这能不能变成 lint 规则"，让这类错误再也写不出来。</li>
+</ol>
+<p>一个具体运作实例：她跑一个扫描 React 常见误用（foot-gun）的 agent，但这个 agent <strong>不被允许修问题</strong>，只能把发现追加到一份文档。每隔几天她读一遍，通常发现十几条记录其实是同一个问题。队列强制人做大局观的归并判断，这是纯执行循环会跳过的步骤。</p>
+<div class="note">数字口径备注：夜间自动合并约 20 个 PR/晚；月度数字各来源口径在 2,000–2,500 之间（2026 年 8 月实际合入 2,462，第三方引用，未经外部审计）。</div>
+
+<h2>8. 外循环自动化：Grok Bot</h2>
+<p>bug 报告来自 Slack、Linear 和社交平台。过去的做法是：她人工读报告，转述给 agent。现在的做法：几个 Grok Bot 订阅这些渠道，把新报告转发进 Cursor Projects（2026-09-10 发布，官方定位是"协调者"——不写代码，只做任务拆分、委派和进度跟踪）。她同时跑十多个协调者，各自负责一个领域（如桌面端性能、用户上报 bug）。</p>
+<p>为什么不是一个 bug 一个 agent：一波报告往往共享同一个根因，分开修会重复劳动并掩盖真正的问题。</p>
+
+<h2>9. 配套工具：pstack</h2>
+<p>她的开源 Cursor 插件，MIT 协议，Markdown skill 文件。版本 0.15.9（2026-10-05 读取）包含：26 个工作流 skill、24 条原则 skill、23 个 playbook、2 个子 agent。代表性内容：</p>
+<ul>
+  <li><code>/create-verification-skill</code>：教 agent 自己生成验证 skill。</li>
+  <li><code>/correct</code>：把一个错误类按"架构 → 类型/lint → 行为测试 → 文档"的顺序修在最高有效层。</li>
+  <li><code>autopilot-full</code> / <code>autopilot-stack</code>：过夜运行的两个等级。</li>
+  <li>23 条工程原则（如 Prove It Works、Subtract Before You Add、Never Block on the Human），用法是"steering"：发现 agent 跑偏时，用原则名字精准纠正，不用重新解释。</li>
+</ul>
+
+<h2>依据与不确定性</h2>
+<p class="basis">以上主线来自视频 UP 主的完整简介（该 UP 主对视频做了 AI 辅助转录、翻译并人工校对）；第 1–7 点的展开综合了演讲者的 pstack 指南两篇长文、cursor/plugins 仓库文档和 Matt Pocock 2026-10-02 访谈的二手记录。B 站平台侧 AI 字幕接口返回的内容与视频不符（实际是一段歌词），无法用机器字幕交叉验证细节，个别表述以文字资料为准。</p>
+
+<footer>
+  <p><strong>参考来源</strong></p>
+  <ul class="srclist">
+    <li>视频：<a href="https://www.bilibili.com/video/BV1WKaV6bEBB">React 核心成员分享：在 SpaceXAI 一个月发 2000 个 PR 的 Agent 工作法（B 站）</a></li>
+    <li>原演讲：<a href="https://x.com/poteto/status/2102050467505430555">Lauren Tan, "how i shipped 2,500 PRs last month to production"（X, 2026-09-21）</a></li>
+    <li><a href="https://developer.tenten.co/pstack-verification-agent-merge">pstack: Agents Merge Their Own PRs After Verifiers Sign Off（tenten.co, 2026-10-05）</a></li>
+    <li><a href="https://juejin.cn/post/7687032811338891302">GrokBot 核心成员 Lauren Tan：每月交付 2000 个 PR 的人，是怎么用 AI 的（稀土掘金, 2026-09-19）</a></li>
+    <li><a href="https://www.51cto.com/article/855038.html">Grok Bot 爆火，把 Agent 当同事，而不是当软件（51CTO, 2026-09-07）</a></li>
+    <li><a href="https://post.smzdm.com/p/avgp57zn/">月合并 2000+ 个 PR 不逐个 Review？（什么值得买, 2026-10-05）</a></li>
+  </ul>
+  <p>生成时间：2026-10-06</p>
+</footer>
+
+</div>
+</body>
+</html>

@@ -32,3 +32,10 @@
 
 1. first candidate, second candidate users
 2. competitors, diff & advantages
+
+MLzero
+
+microsoft RD agent
+
+aide ml
+
