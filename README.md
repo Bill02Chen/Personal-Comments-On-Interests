@@ -1,19 +1,18 @@
-# Some comments on different things
+# Personal Comments on Interests
 
 *厚积薄发*
 
-## 1. Environment install reminder 安装环境
+此仓库用于归档个人对技术、游戏运营、职业发展及学习过程的深度思考与笔记。
 
-Look in Environment Reminders folder
+## 目录结构说明
 
-## 2. Comments on game operation strategy 游戏运营
+- `docs/`：项目相关文档及 Agent 开发规范。
+- `learn/`：个人成长与学习路径（包括 Agent 开发、心理学、面试准备等）。
+- `tech/`：具体技术实践与笔记（如 sEMG、姿态估计）。
+- `research/`：深度技术研究项目（如 DeepInfer 报告）。
+- `thoughts/`：各类感悟与思考（包含游戏运营洞察、创业思考等）。
+- `interviews/`：面试复盘框架与自查清单。
+- `resources/`：环境配置文档及杂项资源。
 
-Look in Game Operations folder
-
-## 3. Improve myself 自我提升
-
-Look in Improve myself folder
-
-## 4. Interview preparation 面试准备
-
-Look in Interview folder
+---
+*注：本仓库整理并归档了日常学习与工作中的观察，旨在构建知识体系，持续更新中。*
