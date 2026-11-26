@@ -9,66 +9,82 @@
 
 会话模型选择器是实际发起对话时使用的模型菜单。模型只出现在设置页，不代表它已经进入该菜单。
 
-本例新增以下 6 个模型：
+本文以 `opencode` 网关为例。当前环境有两条路由：
 
-- `gpt-6.2-astra`：GPT-6.2 Astra
-- `gpt-6.2-sol`：GPT-6.2 Sol
-- `claude-fable-5-2`：Claude Fable 5.2
-- `gemini-4-carbon`：Gemini 4 Carbon
-- `gemini-4-argon`：Gemini 4 Argon
-- `gemini-4-hydrogen`：Gemini 4 Hydrogen
+- `opencode`：直接服务应用内置的 pi-ai 模型目录（86 个模型），不写模型列表。
+- `opencode-latest`：目录之外的 6 个模型，显式声明协议与地址：
+  `gpt-6.2-astra`、`gpt-6.2-sol`、`claude-fable-5-2`、`gemini-4-carbon`、`gemini-4-argon`、`gemini-4-hydrogen`。
 
 ## 2. 先确定实际生效的配置文件
 
-DeepSeek Harness 使用多层补丁配置。配置档（profile）是应用使用的一套配置环境。
-
-本次涉及两层文件：
-
-- 配置档补丁：`~/.dsh/profiles/desktop/cordis.patch.yml`
-- 全局补丁：`~/.dsh/cordis.patch.yml`
-
-加载顺序为：
+DeepSeek Harness 使用多层补丁配置。配置档（profile）是应用使用的一套配置环境。加载顺序为：
 
 ```text
 内置组合包 → 配置档补丁 → 全局补丁 → 命令行覆盖层
 ```
 
-本次环境中，全局补丁包含 `llm-pi-ai`，并覆盖了配置档补丁中的同名配置。因此，**必须修改 `~/.dsh/cordis.patch.yml`**。
+涉及两层文件：
 
-不要只根据“设置页显示了修改内容”判断文件已经生效。会话模型选择器使用运行时模型目录，设置页可以显示另一层原始配置。
+- 配置档补丁：`~/.dsh/profiles/desktop/cordis.patch.yml`
+- 全局补丁（home patch）：`~/.dsh/cordis.patch.yml`
+
+**当前环境：`llm-pi-ai` 只写在配置档补丁里，全局补丁不包含它。**
+
+这一条是关键，原因有三：
+
+1. “设置 → 模型”页写的就是配置档补丁。
+2. 全局补丁若也写了 `llm-pi-ai`，它会覆盖配置档补丁；此时在设置页保存任何提供商都会失败并报：
+
+   ```text
+   Configuration for "llm-pi-ai" is overridden by a home patch or command-line overlay
+   ```
+
+   “添加模型服务商”按钮也会一起置灰。
+3. 全局补丁里的 `llm-pi-ai` 一旦写错，会连同配置档补丁里的模型一起失效，等于整套提供商报废。
 
 ### 判断方法
 
-1. 检查配置档补丁是否包含 `llm-pi-ai`。
-2. 检查全局补丁是否也包含 `llm-pi-ai`。
-3. 如果全局补丁包含该条目，修改全局补丁。
-4. 如果启动命令还提供其他覆盖层，最后检查该覆盖层。
+```bash
+grep -n "llm-pi-ai" ~/.dsh/cordis.patch.yml ~/.dsh/profiles/desktop/cordis.patch.yml
+```
 
-本次验证中，会话菜单包含 `GPT-6.1 Sol`。该模型只存在于全局补丁，不存在于已修改的配置档补丁。这证明会话菜单使用了全局补丁。
+- 只有配置档补丁命中：正确，改配置档补丁（或直接用设置页）。
+- 全局补丁也命中：先删掉全局补丁里的 `llm-pi-ai` 整段，再改配置档补丁。
 
 ## 3. 备份实际生效的文件
 
 ```bash
-cp "$HOME/.dsh/cordis.patch.yml" \
-  "$HOME/.dsh/cordis.patch.yml.bak-$(date +%Y%m%d-%H%M%S)"
+cp "$HOME/.dsh/profiles/desktop/cordis.patch.yml" "$HOME/.dsh/profiles/desktop/cordis.patch.yml.bak-$(date +%Y%m%d-%H%M%S)"
 ```
 
 不要省略备份。配置错误会导致提供商加载失败。
 
 ## 4. 新增独立模型路由
 
-模型路由是提供商 ID、通信协议、接口地址和模型列表的组合。
+模型路由是「提供商 ID + 通信协议 + 接口地址 + 模型列表」的组合。
 
-不要把未知模型直接追加到内置 `opencode` 路由。内置路由依赖已安装的模型目录。目录不认识的新模型会缺少 `api` 字段，并被会话模型选择器过滤。
+### 4.1 内置路由不要写模型列表
 
-保留现有 `opencode` 配置，在同一个 `llm-pi-ai.config.providers` 下新增 `opencode-latest`。
+`opencode` 路由依赖已安装的模型目录。配置里一旦写 `models`，就等于用自己列的清单**替换**目录；目录里没有的 `id` 不会自动补上协议：
+
+```yaml
+      opencode:
+        apiKeyEnv: OPENCODE_API_KEY
+```
+
+保持这样即可，目录里的模型会全部出现。**不要**为了加一两个新模型去改写内置路由的 `models`。
+
+### 4.2 新模型放到独立路由
+
+在同一个 `llm-pi-ai.config.providers` 下新增一条路由，同时写 `api` 和 `baseURL`：
 
 ```yaml
 - id: llm-pi-ai
   name: "@deepseek-ai/dsh-llm-pi-ai"
   config:
     providers:
-      # 保留原有 opencode 配置，不要删除其中的模型。
+      opencode:
+        apiKeyEnv: OPENCODE_API_KEY
 
       opencode-latest:
         displayName: OpenCode Latest
@@ -87,51 +103,6 @@ cp "$HOME/.dsh/cordis.patch.yml" \
               high: high
               xhigh: xhigh
               max: max
-
-          - id: gpt-6.2-sol
-            name: GPT-6.2 Sol
-            contextWindow: 1050000
-            maxTokens: 128000
-            input: [text, image]
-            reasoningEfforts:
-              low: low
-              medium: medium
-              high: high
-              xhigh: xhigh
-              max: max
-
-          - id: claude-fable-5-2
-            name: Claude Fable 5.2
-            contextWindow: 1000000
-            maxTokens: 128000
-            input: [text, image]
-            reasoningEfforts:
-              low: low
-              medium: medium
-              high: high
-              xhigh: xhigh
-              max: max
-
-          - id: gemini-4-carbon
-            name: Gemini 4 Carbon
-            contextWindow: 1048576
-            maxTokens: 65536
-            input: [text, image]
-            reasoningEfforts:
-              low: low
-              medium: medium
-              high: high
-
-          - id: gemini-4-argon
-            name: Gemini 4 Argon
-            contextWindow: 1048576
-            maxTokens: 65536
-            input: [text, image]
-            reasoningEfforts:
-              low: low
-              medium: medium
-              high: high
-
           - id: gemini-4-hydrogen
             name: Gemini 4 Hydrogen
             contextWindow: 1048576
@@ -144,39 +115,44 @@ cp "$HOME/.dsh/cordis.patch.yml" \
               xhigh: xhigh
 ```
 
-`opencode-latest` 与 `opencode` 必须处于同一 YAML 层级。
+`opencode-latest` 与 `opencode` 必须处于同一 YAML 层级（都在 `providers` 下）。
 
-本例通过 OpenCode 接口统一使用 `openai-responses` 协议。Claude 和 Gemini 模型不在此处改用 Anthropic 或 Google 的原生协议。
+`id` 是发送给服务端的模型标识，`name` 是界面显示名称。修改显示名称不会修改服务端模型标识。
 
-`id` 是发送给服务端的模型标识。`name` 是界面显示名称。修改显示名称不会修改服务端模型标识。
+目录里没有的免费模型同理，例如 `ling-3.0-flash-fin-free`：它不是内置目录的一部分，必须独占一条路由。当前配置里留了一段注释掉的模板，协议按同族 free 模型填的是 `openai-completions` + `https://opencode.ai/inference/v1`；启用前先确认该模型实际使用的协议，否则请求阶段会报错。
+
+### 4.3 `api` 只能取四个值
+
+| 值 | 含义 |
+|---|---|
+| `openai-completions` | OpenAI Chat Completions |
+| `openai-responses` | OpenAI Responses |
+| `anthropic-messages` | Anthropic Messages |
+| `google-generative-ai` | Google Generative AI |
+
+写成 `openai-compatible`、`openai`、`openai-chat` 之类的值**不是**可选写法：整个 `llm-pi-ai` 配置段会在校验阶段被判无效，所有路由（包括内置 `opencode`）一起从模型菜单消失。
 
 ## 5. 检查凭据引用
 
-配置中的字段是：
+配置里只引用凭据，不保存明文：
 
 ```yaml
 apiKeyEnv: OPENCODE_API_KEY
 ```
 
-该字段引用凭据，不保存密钥明文。不要把真实 API 密钥写进 `cordis.patch.yml`。
+凭据解析失败时，该路由的模型列表返回空数组，整组不会出现在会话模型选择器中。
 
-在“设置 → 模型”中检查该提供商的 API 密钥状态。如果已有 `opencode` 使用同一凭据并且可以列出模型，先确认其凭据仍然有效。
+当前环境的凭据值保存在 `~/.dsh/.credentials.yaml` 的 `refs` 段（明文，权限 600）。不要把密钥写进 `cordis.patch.yml`。
 
-凭据无法解析时，`opencode-latest` 的模型列表会返回空数组。结果是整个 `OpenCode Latest` 分组不出现在会话模型选择器中。
+## 6. 优先用设置页
 
-## 6. 不要通过 UI 重复创建提供商
+`llm-pi-ai` 没有被全局补丁或命令行覆盖层遮住时，“设置 → 模型 → 添加模型服务商”可以直接增删提供商，写回的也是配置档补丁——效果与手改 YAML 相同，而且非法值会被工具当场拦下。
 
-存在全局补丁覆盖时，通过“自定义模型 API”创建提供商会返回：
-
-```text
-Configuration for "llm-pi-ai" is overridden by a home patch or command-line overlay
-```
-
-此时应修改实际生效的补丁文件。重复点击“创建提供商”不会绕过该限制。
+只有在界面提示覆盖、或需要写注释、批量整理时，才手动编辑 `~/.dsh/profiles/desktop/cordis.patch.yml`。
 
 ## 7. 重启并验证
 
-完全退出 DeepSeek Harness，再重新打开应用。
+配置在启动时挂载。保存后**完全退出 DeepSeek Harness 再打开**（⌘Q 或 Dock 右键退出，不能只关窗口；热重载不覆盖已挂载的 `llm-pi-ai`）。
 
 打开新会话的模型菜单，分别搜索：
 
@@ -188,12 +164,9 @@ Gemini 4
 
 预期结果：
 
-- 菜单出现 `OpenCode Latest` 分组。
+- 菜单出现 `opencode` 分组（内置目录的 86 个模型）。
+- 菜单出现 `OpenCode Latest` 分组（6 个模型）。
 - `GPT-6.2` 返回 Astra 和 Sol。
-- `Fable 5.2` 返回 Claude Fable 5.2。
-- `Gemini 4` 返回 Carbon、Argon 和 Hydrogen。
-
-本次修正后的配置包含原有 73 个 `opencode` 模型和 6 个新模型，共 79 个模型。路由检查结果为 79 个已配置、79 个可路由，缺失 0 个。
 
 界面出现模型只证明模型目录已加载。最后分别发送一次短请求，检查服务端是否接受模型 ID、协议和凭据。
 
@@ -201,28 +174,28 @@ Gemini 4
 
 | 现象 | 检查项 | 处理 |
 |---|---|---|
-| 设置页有新模型，会话菜单没有 | 新模型是否直接放在内置 `opencode` 下 | 改为独立路由，并显式设置 `api`、`baseURL` 和 `models` |
-| 修改并重启后仍显示旧模型 | 全局补丁是否覆盖配置档补丁 | 修改 `~/.dsh/cordis.patch.yml`，不要只修改配置档补丁 |
-| 整个 `OpenCode Latest` 分组缺失 | `OPENCODE_API_KEY` 是否能解析 | 在模型设置页检查凭据状态 |
-| UI 创建提供商时报覆盖错误 | 是否存在全局补丁或命令行覆盖层 | 编辑实际生效的配置文件 |
+| 所有第三方模型一起消失 | `api` 是否写成了四个合法值之外的值 | 改成 `openai-completions` / `openai-responses` / `anthropic-messages` / `google-generative-ai` |
+| 某条路由整组消失，报 `model "xxx" needs an api` | 该路由的 `models` 里是否有目录不认识的 id | 把该 id 移到独立路由，并给路由写 `api` + `baseURL` |
+| 设置页保存报 `overridden by a home patch or command-line overlay` | 全局补丁或 `--patch` 覆盖层是否也有 `llm-pi-ai` | 删掉覆盖层里的 `llm-pi-ai` 整段 |
+| 整组 `OpenCode Latest` 缺失 | `OPENCODE_API_KEY` 能否解析 | 在模型设置页检查凭据状态 |
 | 模型出现在菜单中，但请求失败 | 模型 ID、协议、接口地址、账户权限 | 用短请求逐项检查服务端错误 |
-| 修改配置后应用加载失败 | YAML 缩进和最近备份 | 恢复备份，再重新应用最小修改 |
+| 修改配置后应用加载失败 | YAML 缩进与最近备份 | 恢复备份，再重新应用最小修改 |
+
+排错顺序：先确认哪个文件生效（第 2 节），再看 `api` 取值（第 4.3 节），最后才查模型 id 与凭据。
 
 ## 9. 恢复备份
 
-将下列命令中的时间戳替换为实际备份文件名：
-
 ```bash
-cp "$HOME/.dsh/cordis.patch.yml.bak-YYYYMMDD-HHMMSS" \
-  "$HOME/.dsh/cordis.patch.yml"
+cp "$HOME/.dsh/profiles/desktop/cordis.patch.yml.bak-YYYYMMDD-HHMMSS" "$HOME/.dsh/profiles/desktop/cordis.patch.yml"
 ```
 
 恢复后完全重启 DeepSeek Harness。
 
 ## 10. 核心原则
 
-1. 先确定最后一层有效配置，再编辑文件。
-2. 设置页可见不等于会话菜单可选。
-3. 未知模型需要显式路由，不能只添加模型名称。
-4. 密钥使用凭据引用，不写入 YAML。
-5. 修改后同时验证设置页、会话菜单和真实短请求。
+1. `llm-pi-ai` 只写在配置档补丁里；全局补丁写同名条目会锁死设置页。
+2. 内置路由不写 `models`，新模型走独立路由。
+3. `api` 只接受四个协议值；写错不是单条模型失效，而是整段配置失效。
+4. 一条路由里只要有一个模型缺 `api`/`baseURL`，整条路由都不会加载。
+5. 密钥使用凭据引用，不写入 YAML。
+6. 修改后完全重启，再同时验证设置页、会话菜单和真实短请求。
